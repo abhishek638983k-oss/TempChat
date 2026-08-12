@@ -6,22 +6,32 @@ export const createChat = async (req, res) => {
         const { from, to, msg } = req.body;
 
         if (!from || !to) {
-            throw new Error("sender and receiver are required");
-        } else {
-            const chat = await Chat.create({
-                from,
-                to,
-                msg,
-            });
-
-            res.json(chat);
+            return res
+                .status(400)
+                .json({ msg: "sender and receiver are required" });
         }
+
+        const chat = await Chat.create({
+            from,
+            to,
+            msg,
+        });
+
+        return res.status(201).json(chat);
     } catch (error) {
-        res.json({ msg: error || "error aa gaya bete" });
+        return res
+            .status(500)
+            .json({ msg: error.message || "error aa gaya bete" });
     }
 };
 
 export const sendChats = async (req, res) => {
-    const chats = await Chat.find({});
-    res.json(chats);
+    try {
+        const chats = await Chat.find({});
+        return res.status(200).json(chats);
+    } catch (error) {
+        return res
+            .status(500)
+            .json({ msg: error.message || "Failed to fetch chats" });
+    }
 };

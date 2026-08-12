@@ -4,7 +4,7 @@ const router = express.Router();
 router.post("/", authenticateToken, (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
     });
 

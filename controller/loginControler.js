@@ -23,12 +23,12 @@ export const login = async (req, res) => {
         );
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true, // use false on localhost
+            secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
         });
         res.status(201).json({ msg: "login Succesfull" });
     } catch (error) {
-        res.json({ msg: error.message || "unknown error accured" });
+        res.status(500).json({ msg: error.message || "unknown error accured" });
     }
 };
 
@@ -49,19 +49,25 @@ export const register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const request = await User.create({
+        const createdUser = await User.create({
             username: username,
             password: hashedPassword,
         });
 
+        const token = jwt.sign(
+            { id: createdUser._id, username: createdUser.username },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" },
+        );
+
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true, // use false on localhost
+            secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
         });
 
         res.status(201).json({ msg: "registration Succesfull" });
     } catch (error) {
-        res.json({ msg: error.message || "unknown error accured" });
+        res.status(500).json({ msg: error.message || "unknown error accured" });
     }
 };

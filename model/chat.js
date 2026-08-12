@@ -7,14 +7,12 @@ const chatSchema = new mongoose.Schema(
             required: true,
             trim: true,
             maxlength: 50,
-            unique: true,
         },
         to: {
             type: String,
             required: true,
             trim: true,
             maxlength: 50,
-            unique: true,
         },
         msg: {
             type: String,
