@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chat App</title>
+        <link rel="stylesheet" href="/css/home.css" />
+    </head>
+
+    <body>
+        <div class="container">
+            <header class="header">
+                <h1>Chat App</h1>
+
+                <div class="header-actions">
+                    <!-- Friend Requests -->
+                    <div class="request-container">
+                        <button id="requestBtn" class="request-btn">
+                            Friend Requests
+                        </button>
+
+                        <div id="requestDropdown" class="request-dropdown">
+                            <p class="empty-request">No requests</p>
+                        </div>
+                    </div>
+
+                    <form action="/logout" method="POST">
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </div>
+            </header>
+
+            <!-- Add Friend -->
+            <section class="add-friend">
+                <h2>Add Friend</h2>
+
+                <form id="addFriendForm">
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter username"
+                        required />
+
+                    <button type="submit">Add Friend</button>
+                </form>
+
+                <p id="message"></p>
+            </section>
+
+            <!-- Friends -->
+            <section class="friends-section">
+                <h2>Friends</h2>
+
+                <div id="friendsList">
+                    <!-- Friends loaded by JS -->
+                </div>
+            </section>
+        </div>
+
+        <script src="/js/home.js"></script>
+    </body>
+</html>
