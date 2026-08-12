@@ -1,10 +1,11 @@
 import express from "express";
-import { login, register } from "../controller/loginControler.js";
 import authenticateToken from "../middleware/authenticate.js";
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.status(200).render("home.ejs");
+router.get("/", authenticateToken, (req, res) => {
+    res.status(200).render("home.ejs", {
+        username: req.user?.username || "User",
+    });
 });
 
 export default router;

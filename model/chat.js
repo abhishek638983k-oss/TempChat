@@ -3,19 +3,20 @@ import mongoose from "mongoose";
 const chatSchema = new mongoose.Schema(
     {
         from: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
             required: true,
-            trim: true,
-            maxlength: 50,
         },
+
         to: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
             required: true,
-            trim: true,
-            maxlength: 50,
         },
+
         msg: {
             type: String,
+            required: true,
             trim: true,
             maxlength: 200,
         },
@@ -24,7 +25,6 @@ const chatSchema = new mongoose.Schema(
         timestamps: true,
     },
 );
-
 const Chat = mongoose.model("Chat", chatSchema);
 
 export default Chat;

@@ -8,6 +8,8 @@ export default function authenticateToken(req, res, next) {
         req.originalUrl.startsWith(prefix),
     );
 
+    console.log(req.originalUrl);
+
     if (!token) {
         if (isJsonRoute) {
             return res.status(401).json({ msg: "Unauthorized" });
