@@ -5,7 +5,6 @@ import User from "../model/user.js";
 export const createReq = async (req, res) => {
     try {
         const from = req.user.id;
-        const fromUsername = req.user.username;
         const to = req.body.username;
 
         if (!from || !to) {
@@ -61,7 +60,6 @@ export const createReq = async (req, res) => {
         // 5. No relationship exists → create request
         await FriendRequest.create({
             from,
-            fromUsername,
             to: receiverId,
             status: "pending",
         });
@@ -81,7 +79,7 @@ export const requests = async (req, res) => {
         const userid = req.user.id;
         const friendRequests = await FriendRequest.find({
             to: userid,
-        });
+        }).populate("from", "username");
         res.json(friendRequests);
     } catch (error) {
         res.status(401).json({ msg: "usernaem required " });

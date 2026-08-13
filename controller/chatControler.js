@@ -6,15 +6,14 @@ export const createChat = async (req, res) => {
     try {
         const senderId = req.user.id;
         const { to, msg } = req.body;
-
         if (!to || !msg) {
             return res
                 .status(400)
                 .json({ msg: "receiver and message are required" });
         }
 
-        const receiver = await User.findOne({ username: to });
-
+        const receiver = await User.findOne({ _id: to });
+        console.log(receiver);
         if (!receiver) {
             return res.status(404).json({ msg: "Receiver not found" });
         }
@@ -40,47 +39,47 @@ export const createChat = async (req, res) => {
     } catch (error) {
         return res
             .status(500)
-            .json({ msg: error.message || "error aa gaya bete" });
+            .json({ msg: error.message || "something went wrong" });
     }
 };
 
 export const sendChats = async (req, res) => {
     try {
         const currentUserId = req.user.id;
-        const { username } = req.query;
+        const friendId = req.params.id;
 
-        let query = {
-            $or: [{ from: currentUserId }, { to: currentUserId }],
-        };
+        // Find friend
+        const friend = await User.findById(friendId).select("username");
 
-        if (username) {
-            const otherUser = await User.findOne({ username });
-
-            if (!otherUser) {
-                return res.status(404).json({ msg: "User not found" });
-            }
-
-            query = {
-                $and: [
-                    {
-                        $or: [{ from: currentUserId }, { to: currentUserId }],
-                    },
-                    {
-                        $or: [{ from: otherUser._id }, { to: otherUser._id }],
-                    },
-                ],
-            };
+        if (!friend) {
+            return res.status(404).send("User not found");
         }
 
-        const chats = await Chat.find(query)
+        // Get messages between the two users
+        const messages = await Chat.find({
+            $or: [
+                {
+                    from: currentUserId,
+                    to: friendId,
+                },
+                {
+                    from: friendId,
+                    to: currentUserId,
+                },
+            ],
+        })
             .populate("from", "username")
             .populate("to", "username")
             .sort({ createdAt: 1 });
 
-        return res.status(200).json(chats);
-    } catch (error) {
-        return res
-            .status(500)
-            .json({ msg: error.message || "Failed to fetch chats" });
+        res.render("chat", {
+            messages,
+            friend,
+            friendId,
+            currentUserId,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server error");
     }
 };

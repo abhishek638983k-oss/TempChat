@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chat with <%= friend.username %></title>
+
+    <link rel="stylesheet" href="/css/chat.css">
+</head>
+
+<body>
+
+    <div class="chat-container">
+
+        <!-- Header -->
+        <div class="chat-header">
+
+            <a href="/home" class="back-btn">←</a>
+
+            <div class="friend-info">
+                <div class="avatar">
+                    <%= friend.username.charAt(0).toUpperCase() %>
+                </div>
+
+                <div>
+                    <h3><%= friend.username %></h3>
+                    <span>Online</span>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Messages -->
+        <div class="messages" id="messages">
+
+            <% messages.forEach(message => { %>
+
+                <% if (message.from._id.toString() === currentUserId.toString()) { %>
+
+                    <!-- My message -->
+                    <div class="message-row sent">
+
+                        <div class="message">
+                            <p><%= message.msg %></p>
+
+                            <span class="time">
+                                <%= new Date(message.createdAt).toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit"
+                                }) %>
+                            </span>
+                        </div>
+
+                    </div>
+
+                <% } else { %>
+
+                    <!-- Friend's message -->
+                    <div class="message-row received">
+
+                        <div class="message">
+                            <p><%= message.msg %></p>
+
+                            <span class="time">
+                                <%= new Date(message.createdAt).toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit"
+                                }) %>
+                            </span>
+                        </div>
+
+                    </div>
+
+                <% } %>
+
+            <% }) %>
+
+        </div>
+
+
+        <!-- Message input -->
+        <form id="messageForm" class="message-form">
+
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Type a message..."
+                maxlength="200"
+                autocomplete="off"
+                required
+            >
+
+            <button type="submit">
+                ➤
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <script>
+        const id = "<%= friendId %>";
+    </script>
+
+    <script src="/js/chat.js"></script>
+
+</body>
+
+</html>

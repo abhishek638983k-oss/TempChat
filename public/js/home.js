@@ -38,6 +38,7 @@ async function loadFriends() {
     const json = await response.json();
 
     const friends = json.friends;
+    console.log(friends);
     friendsList.innerHTML = "";
     friends.forEach((friend) => {
         const div = document.createElement("div");
@@ -46,7 +47,7 @@ async function loadFriends() {
         div.textContent = friend.username;
 
         div.addEventListener("click", () => {
-            window.location.href = `/chat?username=${friend.username}`;
+            window.location.href = `/chat/${friend._id}`;
         });
 
         friendsList.appendChild(div);
@@ -77,7 +78,7 @@ async function loadRequests() {
         div.className = "friend-request";
 
         div.innerHTML = `
-            <span>${request.fromUsername}</span>
+            <span>${request.from.username}</span>
             <button class="confirm-btn">
                 Confirm
             </button>
