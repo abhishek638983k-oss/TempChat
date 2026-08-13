@@ -48,14 +48,12 @@ export const sendChats = async (req, res) => {
         const currentUserId = req.user.id;
         const friendId = req.params.id;
 
-        // Find friend
         const friend = await User.findById(friendId).select("username");
 
         if (!friend) {
             return res.status(404).send("User not found");
         }
 
-        // Get messages between the two users
         const messages = await Chat.find({
             $or: [
                 {
@@ -81,5 +79,28 @@ export const sendChats = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send("Server error");
+    }
+};
+
+export const getMessagesForChat = async (req, res) => {
+    try {
+        const currentUserId = req.user.id;
+        const friendId = req.params.id;
+
+        const messages = await Chat.find({
+            $or: [
+                { from: currentUserId, to: friendId },
+                { from: friendId, to: currentUserId },
+            ],
+        })
+            .populate("from", "username")
+            .populate("to", "username")
+            .sort({ createdAt: 1 });
+
+        return res.status(200).json(messages);
+    } catch (error) {
+        return res
+            .status(500)
+            .json({ msg: error.message || "something went wrong" });
     }
 };

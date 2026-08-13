@@ -41,7 +41,7 @@
                 <% if (message.from._id.toString() === currentUserId.toString()) { %>
 
                     <!-- My message -->
-                    <div class="message-row sent">
+                    <div class="message-row sent" data-message-id="<%= message._id %>">
 
                         <div class="message">
                             <p><%= message.msg %></p>
@@ -59,7 +59,7 @@
                 <% } else { %>
 
                     <!-- Friend's message -->
-                    <div class="message-row received">
+                    <div class="message-row received" data-message-id="<%= message._id %>">
 
                         <div class="message">
                             <p><%= message.msg %></p>
@@ -104,9 +104,10 @@
 
     <script>
         const id = "<%= friendId %>";
+        const currentUserId = "<%= currentUserId %>";
     </script>
 
-    <script src="/js/chat.js"></script>
+    <script type="module" src="/js/chat.js"></script>
 
 </body>
 
