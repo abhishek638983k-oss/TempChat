@@ -93,6 +93,22 @@ input {
     color: var(--gray);
 }
 
+.status-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: var(--gray);
+}
+
+.status-text.online {
+    color: #7ce38b;
+}
+
+.status-text.offline {
+    color: var(--gray);
+}
+
 .messages {
     flex: 1;
     padding: 20px 18px;

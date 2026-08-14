@@ -6,6 +6,7 @@ const requestBtn = document.getElementById("requestBtn");
 const requestDropdown = document.getElementById("requestDropdown");
 
 loadFriends();
+setInterval(loadFriends, 10000);
 
 addFriendForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -44,7 +45,15 @@ async function loadFriends() {
         const div = document.createElement("div");
 
         div.className = "friend";
-        div.textContent = friend.username;
+        div.innerHTML = `
+            <div class="friend-main">
+                <span class="friend-name">${friend.username}</span>
+                <span class="friend-status ${friend.online ? "online" : "offline"}">
+                    ${friend.online ? "Online" : "Offline"}
+                </span>
+            </div>
+            <span class="presence-dot ${friend.online ? "online" : "offline"}"></span>
+        `;
 
         div.addEventListener("click", () => {
             window.location.href = `/chat/${friend._id}`;

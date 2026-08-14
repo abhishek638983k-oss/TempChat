@@ -109,3 +109,32 @@ function scrollToBottom() {
 
 scrollToBottom();
 setInterval(refreshMessages, 4000);
+
+async function refreshPresenceStatus() {
+    try {
+        const response = await fetch("/api/friend");
+
+        if (!response.ok) {
+            return;
+        }
+
+        const data = await response.json();
+        const friend = data.friends?.find(
+            (user) => String(user._id) === String(id),
+        );
+        const statusText = document.querySelector(".status-text");
+
+        if (!statusText || !friend) {
+            return;
+        }
+
+        const isOnline = Boolean(friend.online);
+        statusText.textContent = isOnline ? "Online" : "Offline";
+        statusText.classList.toggle("online", isOnline);
+        statusText.classList.toggle("offline", !isOnline);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+setInterval(refreshPresenceStatus, 10000);

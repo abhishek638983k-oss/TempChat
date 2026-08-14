@@ -176,8 +176,44 @@ input {
     background: rgba(255, 255, 255, 0.02);
 }
 
+.friend-main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .friend-name {
     font-weight: 600;
+}
+
+.friend-status {
+    font-size: 0.76rem;
+    color: var(--gray);
+}
+
+.friend-status.online {
+    color: #7ce38b;
+}
+
+.friend-status.offline {
+    color: var(--gray);
+}
+
+.presence-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #5a5a5e;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.03);
+}
+
+.presence-dot.online {
+    background: #4ade80;
+    box-shadow: 0 0 12px rgba(74, 222, 128, 0.8);
+}
+
+.presence-dot.offline {
+    background: #6b7280;
 }
 
 .friend-meta {

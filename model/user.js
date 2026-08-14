@@ -19,6 +19,21 @@ const userSchema = new mongoose.Schema({
         default: Date.now,
     },
 
+    online: {
+        type: Boolean,
+        default: false,
+    },
+
+    lastActiveAt: {
+        type: Date,
+        default: Date.now,
+    },
+
+    onlineTimeoutMinutes: {
+        type: Number,
+        default: 3,
+    },
+
     friends: [
         {
             type: mongoose.Schema.Types.ObjectId,

@@ -48,11 +48,18 @@ export const sendChats = async (req, res) => {
         const currentUserId = req.user.id;
         const friendId = req.params.id;
 
-        const friend = await User.findById(friendId).select("username");
+        const friend = await User.findById(friendId).select(
+            "username online lastActiveAt onlineTimeoutMinutes",
+        );
 
         if (!friend) {
             return res.status(404).send("User not found");
         }
+
+        const timeoutMs = (friend.onlineTimeoutMinutes || 5) * 60 * 1000;
+        const isOnline =
+            friend.lastActiveAt &&
+            Date.now() - new Date(friend.lastActiveAt).getTime() <= timeoutMs;
 
         const messages = await Chat.find({
             $or: [
@@ -72,7 +79,10 @@ export const sendChats = async (req, res) => {
 
         res.render("chat", {
             messages,
-            friend,
+            friend: {
+                ...friend.toObject(),
+                online: isOnline,
+            },
             friendId,
             currentUserId,
         });

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="icon" type="image/svg+xml" href="/assets\tempChat.png">
     <title>TempChat | Chat with <%= friend.username %></title>
 
     <link rel="stylesheet" href="/css/chat.css">
@@ -26,7 +26,9 @@
 
                 <div>
                     <h3><%= friend.username %></h3>
-                    <span>Online</span>
+                    <span class="status-text <%= friend.online ? 'online' : 'offline' %>">
+                        <%= friend.online ? 'Online' : 'Offline' %>
+                    </span>
                 </div>
             </div>
 
