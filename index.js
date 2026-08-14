@@ -11,6 +11,7 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import authenticateToken from "./middleware/authenticate.js";
 import logoutRoute from "./routes/logout.js";
+import User from "./model/user.js";
 
 dotenv.config();
 
@@ -35,6 +36,24 @@ app.use("/api", apiRoute);
 app.use("/login", loginRoute);
 app.use("/home", homeRoute);
 app.use("/logout", logoutRoute);
+
+app.get("/health", async (req, res) => {
+    try {
+        const dbCheck = await User.findOne().select("_id").lean();
+        res.status(200).json({
+            ok: true,
+            status: "healthy",
+            db: dbCheck ? "connected" : "empty",
+            timestamp: new Date().toISOString(),
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            status: "unhealthy",
+            error: error.message || "Database check failed",
+        });
+    }
+});
 
 app.get("/", authenticateToken, (req, res) => {
     res.redirect("/home");
