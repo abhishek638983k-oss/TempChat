@@ -13,7 +13,6 @@ export const createChat = async (req, res) => {
         }
 
         const receiver = await User.findOne({ _id: to });
-        console.log(receiver);
         if (!receiver) {
             return res.status(404).json({ msg: "Receiver not found" });
         }
